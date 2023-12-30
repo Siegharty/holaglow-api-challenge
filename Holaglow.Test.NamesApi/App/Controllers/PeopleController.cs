@@ -16,9 +16,9 @@ namespace App.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PeopleModel>>> GetNames()
+        public async Task<ActionResult<IEnumerable<PeopleModel>>> GetNames(string? name)
         {
-            var listOfPeople = await _peopleRepository.GetListOfNamesAsync();
+            var listOfPeople = await _peopleRepository.GetListOfNamesAsync(name);
             return Ok(listOfPeople);
         }
     }
