@@ -1,6 +1,4 @@
 ﻿using App.Data;
-
-//using App.DbContexts;
 using App.Models;
 using Microsoft.AspNetCore.Mvc;
 
