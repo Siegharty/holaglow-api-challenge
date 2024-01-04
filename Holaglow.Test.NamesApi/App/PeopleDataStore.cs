@@ -5,9 +5,6 @@ namespace App
 {
     public class PeopleDataStore
     {
-        public List<PeopleModel> Peoples { get; set; }
-        public static PeopleDataStore Current { get; } = new PeopleDataStore();
-
         public static List<PeopleModel> RetrievePeopleObject()
         {
             try
@@ -28,6 +25,8 @@ namespace App
                 return new List<PeopleModel>();
             }
         }
+        public virtual List<PeopleModel> Peoples { get; set; }
+
 
         public PeopleDataStore()
         {

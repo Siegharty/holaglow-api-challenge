@@ -4,9 +4,14 @@ namespace App.Data
 {
     public class PeopleRepository : IPeopleRepository
     {
-        public async Task<IEnumerable<PeopleModel>> GetListOfNamesAsync()
+        private readonly PeopleDataStore _peopleDataStore;
+        public PeopleRepository() {
+            _peopleDataStore = new PeopleDataStore();
+        
+        }
+        public async Task<IEnumerable<PeopleModel>> GetAllNames()
         {
-            var listOfPeople = PeopleDataStore.Current.Peoples.ToList();
+            var listOfPeople = _peopleDataStore.Peoples.ToList();
             return listOfPeople;
         }
 
@@ -17,10 +22,10 @@ namespace App.Data
 
             if (nameIsNull && genderIsNull)
             {
-                return await GetListOfNamesAsync();
+                return await GetAllNames();
             }
 
-            var peopleStore = PeopleDataStore.Current.Peoples.AsQueryable();
+            var peopleStore = _peopleDataStore.Peoples.AsQueryable();
 
             if (!nameIsNull)
             {
