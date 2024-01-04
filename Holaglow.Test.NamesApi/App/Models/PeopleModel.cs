@@ -8,6 +8,6 @@
 
     public class PeopleResponseModel
     {
-        public List<PeopleModel> response { get; set; }
+        public List<PeopleModel>? response { get; set; }
     }
 }
