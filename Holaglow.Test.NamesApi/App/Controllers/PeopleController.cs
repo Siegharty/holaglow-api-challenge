@@ -16,9 +16,9 @@ namespace App.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PeopleModel>>> GetNames(string? name)
+        public async Task<ActionResult<IEnumerable<PeopleModel>>> GetNames([FromQuery] PeopleValidationParams peopleParams)
         {
-            var listOfPeople = await _peopleRepository.GetListOfNamesAsync(name);
+            var listOfPeople = await _peopleRepository.GetListOfNamesAsync(peopleParams.Name, peopleParams.Gender);
             return Ok(listOfPeople);
         }
     }
