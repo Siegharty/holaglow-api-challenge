@@ -18,13 +18,16 @@ namespace App.Controllers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
+        /// <summary>
+        /// Obtiene todos los nombres.
+        /// </summary>
+        /// <param name="peopleParams">Objeto que recibe el nombre de la persona y su genero.</param>
         [Route("names")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PeopleModel>>> GetNamesAsync([FromQuery] PeopleValidationParams peopleParams)
         {
             try
             {
-                throw new Exception();
                 var listOfPeople = await _peopleRepository.GetListOfNamesAsync(peopleParams.Name, peopleParams.Gender);
 
                 if (listOfPeople.Count() == 0)
