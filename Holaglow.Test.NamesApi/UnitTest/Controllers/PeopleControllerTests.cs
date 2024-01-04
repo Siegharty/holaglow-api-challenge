@@ -2,6 +2,7 @@
 using App.Data;
 using App.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -22,10 +23,11 @@ namespace UnitTest.Controllers
         public async Task ShouldReturnOneName()
         {
             Mock<IPeopleRepository> _mockPeopleRepository = new Mock<IPeopleRepository>();
+            Mock<ILogger<PeopleController>> _logger = new Mock<ILogger<PeopleController>>();
             _mockPeopleRepository
                .Setup(repo => repo.GetListOfNamesAsync(It.IsAny<string>(), It.IsAny<string>()))
                .ReturnsAsync(new List<PeopleModel>() { new PeopleModel() { gender = "M", name = "Kevin" } });
-            PeopleController _controller = new PeopleController(_mockPeopleRepository.Object);
+            PeopleController _controller = new PeopleController(_mockPeopleRepository.Object, _logger.Object);
 
             PeopleValidationParams _validationParams = new PeopleValidationParams();
             var result = await _controller.GetNamesAsync(_validationParams);
