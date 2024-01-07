@@ -28,7 +28,7 @@ namespace App.Controllers
         {
             try
             {
-                var listOfPeople = await _peopleRepository.GetListOfNamesAsync(peopleParams.Name, peopleParams.Gender);
+                var listOfPeople = await _peopleRepository.GetListOfNamesAsync(peopleParams);
 
                 if (listOfPeople.Count() == 0)
                 {

@@ -5,41 +5,36 @@ namespace App.Data
     public class PeopleRepository : IPeopleRepository
     {
         private readonly PeopleDataStore _peopleDataStore;
-        public PeopleRepository() {
+        public PeopleRepository()
+        {
             _peopleDataStore = new PeopleDataStore();
-        
-        }
-        public async Task<IEnumerable<PeopleModel>> GetAllNames()
-        {
-            var listOfPeople = _peopleDataStore.Peoples.ToList();
-            return listOfPeople;
+
         }
 
-        public async Task<IEnumerable<PeopleModel>> GetListOfNamesAsync(string name, string gender)
+        public async Task<IEnumerable<PeopleModel>> GetListOfNamesAsync(PeopleValidationParams peopleParams)
         {
-            var nameIsNull = string.IsNullOrEmpty(name);
-            var genderIsNull = string.IsNullOrEmpty(gender);
-
-            if (nameIsNull && genderIsNull)
-            {
-                return await GetAllNames();
-            }
+            var nameIsNull = string.IsNullOrEmpty(peopleParams.Name);
+            var genderIsNull = string.IsNullOrEmpty(peopleParams.Gender);
 
             var peopleStore = _peopleDataStore.Peoples.AsQueryable();
 
             if (!nameIsNull)
             {
-                var nameTrimed = name.Trim().ToLower();
+                var nameTrimed = peopleParams.Name.Trim().ToLower();
                 peopleStore = peopleStore.Where(p => p.name.ToLower().StartsWith(nameTrimed));
             }
 
             if (!genderIsNull)
             {
-                var genderTrimed = gender.Trim().ToLower();
+                var genderTrimed = peopleParams.Gender.Trim().ToLower();
                 peopleStore = peopleStore.Where(p => !genderIsNull && p.gender.ToLower() == genderTrimed);
             }
 
-            return peopleStore.OrderBy(p => p.name).ToList();
+            return peopleStore
+                .OrderBy(p => p.name)
+                .Skip(peopleParams.Size * (peopleParams.Page - 1))
+                .Take(peopleParams.Size)
+                .ToList();
         }
     }
 }
