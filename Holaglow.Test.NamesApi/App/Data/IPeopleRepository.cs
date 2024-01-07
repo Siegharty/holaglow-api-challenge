@@ -4,6 +4,6 @@ namespace App.Data
 {
     public interface IPeopleRepository
     {
-        Task<IEnumerable<PeopleModel>> GetListOfNamesAsync(PeopleValidationParams peopleParams);
+        Task<(IEnumerable<PeopleModel>, PeoplePaginationMetaData)> GetListOfNamesAsync(PeopleValidationParams peopleParams);
     }
 }

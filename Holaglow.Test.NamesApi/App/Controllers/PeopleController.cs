@@ -1,6 +1,8 @@
 ﻿using App.Data;
 using App.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
+
 
 namespace App.Controllers
 {
@@ -19,22 +21,26 @@ namespace App.Controllers
         }
 
         /// <summary>
-        /// Obtiene todos los nombres.
+        /// Get all Names.
         /// </summary>
-        /// <param name="peopleParams">Objeto que recibe el nombre de la persona y su genero.</param>
+        /// <param name="peopleParams">Object that receive name, gender, page, size</param>
         [Route("names")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PeopleModel>>> GetNamesAsync([FromQuery] PeopleValidationParams peopleParams)
         {
             try
             {
-                var listOfPeople = await _peopleRepository.GetListOfNamesAsync(peopleParams);
+                var (listOfPeople, paginationMetaData) = await _peopleRepository.GetListOfNamesAsync(peopleParams);
+
+                Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(paginationMetaData));
 
                 if (listOfPeople.Count() == 0)
                 {
                     _logger.LogInformation($"No hay datos o no se ha encontrado ninguna persona con esos parametros Nombre: {peopleParams.Name} Genero: {peopleParams.Gender}");
-                    return NotFound();
+                    return Ok(listOfPeople);
                 }
+
+
 
                 return Ok(listOfPeople);
 

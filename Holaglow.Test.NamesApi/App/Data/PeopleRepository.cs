@@ -11,7 +11,7 @@ namespace App.Data
 
         }
 
-        public async Task<IEnumerable<PeopleModel>> GetListOfNamesAsync(PeopleValidationParams peopleParams)
+        public async Task<(IEnumerable<PeopleModel>, PeoplePaginationMetaData)> GetListOfNamesAsync(PeopleValidationParams peopleParams)
         {
             var nameIsNull = string.IsNullOrEmpty(peopleParams.Name);
             var genderIsNull = string.IsNullOrEmpty(peopleParams.Gender);
@@ -30,11 +30,17 @@ namespace App.Data
                 peopleStore = peopleStore.Where(p => !genderIsNull && p.gender.ToLower() == genderTrimed);
             }
 
-            return peopleStore
+            var totalPeopleCount = peopleStore.Count();
+
+            var paginationMetaData = new PeoplePaginationMetaData(totalPeopleCount, peopleParams.Size, peopleParams.Page);
+
+            var collectionToReturn = peopleStore
                 .OrderBy(p => p.name)
                 .Skip(peopleParams.Size * (peopleParams.Page - 1))
                 .Take(peopleParams.Size)
                 .ToList();
+
+            return (collectionToReturn, paginationMetaData);
         }
     }
 }
