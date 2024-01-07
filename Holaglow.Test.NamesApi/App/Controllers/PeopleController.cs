@@ -40,8 +40,6 @@ namespace App.Controllers
                     return Ok(listOfPeople);
                 }
 
-
-
                 return Ok(listOfPeople);
 
             }
